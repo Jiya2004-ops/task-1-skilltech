@@ -1,0 +1,60 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np  # for handling NaN values
+
+# Sample data (replace with your actual data import)
+data = {'country': ['US', 'China', 'India', 'Indonesia', 'Brazil'],
+        'population': [333993620, 1444000000, 1380004385, 273523615, 212559409]}
+df = pd.DataFrame(data)
+
+# Generate random life expectancy data (assuming life expectancy between 60 and 85 years)
+df['life_expectancy'] = np.random.randint(low=60, high=86, size=df.shape[0])
+
+# Function to create bar chart (reusable)
+def create_bar_chart(data_frame, x_col, y_col, title, x_rotation=45):
+  """
+  This function creates a bar chart for a given DataFrame.
+
+  Args:
+      data_frame (pandas.DataFrame): The DataFrame containing the data.
+      x_col (str): The name of the column for the x-axis.
+      y_col (str): The name of the column for the y-axis.
+      title (str): The title of the chart.
+      x_rotation (int, optional): The degree of rotation for x-axis labels (default: 45).
+  """
+  plt.figure(figsize=(10, 6))
+  plt.bar(data_frame[x_col], data_frame[y_col])
+  plt.xlabel(x_col)
+  plt.ylabel(y_col)
+  plt.title(title)
+  plt.xticks(rotation=x_rotation)  # Rotate x-axis labels for better readability
+  plt.show()
+
+# Function to create histogram (reusable)
+def create_histogram(data_frame, col_name, title):
+  """
+  This function creates a histogram for a given DataFrame column.
+
+  Args:
+      data_frame (pandas.DataFrame): The DataFrame containing the data.
+      col_name (str): The name of the column for the histogram.
+      title (str): The title of the chart.
+  """
+  plt.figure(figsize=(8, 6))
+  # Check for missing values
+  missing_values = data_frame[col_name].isnull().sum()
+  if missing_values > 0:
+    print(f"Warning: {missing_values} missing values found in '{col_name}' column.")
+  # Optionally impute missing values (replace with your strategy)
+  # df[col_name] = df[col_name].fillna(df[col_name].mean())
+  plt.hist(data_frame[col_name])
+  plt.xlabel(col_name)
+  plt.ylabel("Frequency")
+  plt.title(title)
+  plt.show()
+
+# Create bar chart for population distribution by country
+create_bar_chart(df.copy(), 'country', 'population', 'Population Distribution by Country')
+
+# Create histogram for life expectancy
+create_histogram(df.copy(), 'life_expectancy', 'Distribution of Life Expectancy')
